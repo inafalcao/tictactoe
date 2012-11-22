@@ -28,6 +28,14 @@ int choose_mode();
 char choose_player_character();
 void user_computer();
 void computer_computer();
+void random_move(char board[N][N], char ch);
+int block_line_1(char board[N][N], char ch);
+int block_line_2(char board[N][N], char ch);
+int block_line_2(char board[N][N], char ch);
+int block_player(char board[N][N], char ch);
+int draw_game(char board[N][N]);
+int check_winner(char board[N][N]);
+void move_computer(char board[N][N], char ch);
 
 int main()
 {
@@ -96,8 +104,211 @@ char choose_player_character() {
     return choice;
 }
 
+/*
+*
+*
+*/
+void random_move(char board[N][N], char ch){
+     int x, y;
+     
+     do{
+         x = rand()%3;
+         y = rand()%3;
+     }while(board[x][y] != EMPTY_CHAR);
+     
+     board[x][y] = ch;
+}
+
+/*
+*
+*
+*/
+int block_line_1(char board[N][N], char ch){
+    if(board[0][0] == EMPTY_CHAR){
+       if(((board[0][1] == board[0][2]) && (board[0][1] != EMPTY_CHAR)) ||
+          ((board[1][0] == board[2][0]) && (board[1][0] != EMPTY_CHAR)) ||
+          ((board[1][1] == board[2][2]) && (board[1][1] != EMPTY_CHAR))){
+                        board[0][0] = ch;
+                        return TRUE;
+          }
+    }
+    
+    if(board[0][1] == EMPTY_CHAR){
+       if(((board[0][0] == board[0][2]) && (board[0][0] != EMPTY_CHAR)) ||
+          ((board[1][1] == board[2][1]) && (board[1][1] != EMPTY_CHAR))){
+                        board[0][1] = ch;
+                        return TRUE;
+          }
+    }
+    
+    if(board[0][2] == EMPTY_CHAR){
+       if(((board[0][0] == board[0][1]) && (board[0][0] != EMPTY_CHAR)) ||
+          ((board[1][2] == board[2][2]) && (board[1][2] != EMPTY_CHAR)) ||
+          ((board[1][1] == board[2][0]) && (board[1][1] != EMPTY_CHAR))){
+                        board[0][2] = ch;
+                        return TRUE;
+          }
+    }
+    
+    return FALSE;
+}
+
+/*
+*
+*
+*/
+int block_line_2(char board[N][N], char ch){
+    if(board[1][0] == EMPTY_CHAR){
+       if(((board[1][1] == board[1][2]) && (board[1][1] != EMPTY_CHAR)) ||
+          ((board[0][0] == board[2][0]) && (board[0][0] != EMPTY_CHAR))){
+                        board[1][0] = ch;
+                        return TRUE;
+          }
+    }
+    
+    if(board[1][1] == EMPTY_CHAR){
+       if(((board[1][0] == board[1][2]) && (board[1][0] != EMPTY_CHAR)) ||
+          ((board[0][1] == board[2][1]) && (board[0][1] != EMPTY_CHAR)) ||
+          ((board[0][2] == board[2][0]) && (board[0][2] != EMPTY_CHAR))){
+                        board[1][1] = ch;
+                        return TRUE;
+          }
+    }
+    
+    if(board[1][2] == EMPTY_CHAR){
+       if(((board[1][0] == board[1][1]) && (board[1][0] != EMPTY_CHAR)) ||
+          ((board[0][2] == board[2][2]) && (board[0][2] != EMPTY_CHAR))){
+                        board[1][2] = ch;
+                        return TRUE;
+          }
+    }
+    
+    return FALSE;
+}
+
+/*
+*
+*
+*/
+int block_line_3(char board[N][N], char ch){
+    if(board[2][0] == EMPTY_CHAR){
+       if(((board[2][1] == board[2][2]) && (board[2][1] != EMPTY_CHAR)) ||
+          ((board[0][0] == board[1][0]) && (board[0][0] != EMPTY_CHAR)) ||
+          ((board[0][2] == board[1][1]) && (board[0][2] != EMPTY_CHAR))){
+                        board[2][0] = ch;
+                        return TRUE;
+          }
+    }
+    
+    if(board[2][1] == EMPTY_CHAR){
+       if(((board[2][0] == board[2][2]) && (board[2][0] != EMPTY_CHAR)) ||
+          ((board[0][1] == board[1][1]) && (board[0][1] != EMPTY_CHAR))){
+                        board[2][1] = ch;
+                        return TRUE;
+          }
+    }
+    
+    if(board[2][2] == EMPTY_CHAR){
+       if(((board[2][0] == board[2][1]) && (board[2][0] != EMPTY_CHAR)) ||
+          ((board[0][2] == board[1][2]) && (board[0][2] != EMPTY_CHAR)) ||
+          ((board[0][0] == board[1][1]) && (board[0][0] != EMPTY_CHAR))){
+                        board[2][2] = ch;
+                        return TRUE;
+          }
+    }
+    
+    return FALSE;
+}
+
+/*
+*
+*
+*/
+int block_player(char board[N][N], char ch){
+    
+    if(block_line_1(board, ch) || block_line_2(board, ch) || block_line_3(board, ch)) return TRUE;
+    return FALSE;
+}
+
+/*
+*
+*
+*/
+int draw_game(char board[N][N]){
+    int i, j;
+    
+    for(i=0; i < N; i++){
+          for(j=0; j < N; j++){
+              if(board[i][j] == EMPTY_CHAR) return FALSE;
+          }
+    }
+    
+    return TRUE;
+} 
+ 
+/*
+*
+*
+*/
+int check_winner(char board[N][N]){
+    int i;
+    
+    for(i = 0; i < 3; i++){
+          if((board[i][0] == board[i][1]) && (board[i][0] == board[i][2])){
+              return board[i][0];
+          }
+    }
+    
+    for(i = 0; i < 3; i++){
+          if((board[0][i] == board[1][i]) && (board[0][i] == board[2][i])){
+               return board[0][i];
+          }
+    }
+    
+    if((board[0][0] == board[2][2]) && (board[1][1] == board[2][2])){
+         return board[1][1];
+    }
+    if((board[1][1] == board[0][2]) && (board[1][1] == board[2][0])){
+         return board[1][1];
+    }
+     
+    if(draw_game(board)) return 'V';
+    
+    return EMPTY_CHAR;
+}
+
+/*
+*
+*
+*/
+void move_computer(char board[N][N], char ch){
+     if(block_player(board, ch)) return;
+     random_move(board, ch);
+}
+
+/*
+*
+*
+*/
 void computer_computer() {
-     printf("Faz nada ainda\n");
+     char ch = PLAYER_X; // Somente para teste
+     char final;
+     char board[N][N];
+     
+     init_board(board);
+     do{
+         move_computer(board, ch);
+         print_board(board);
+         final = check_winner(board);
+         if(ch == PLAYER_X){
+             ch = PLAYER_O;
+         }
+         else{
+             ch = PLAYER_X;
+         }
+         getchar();
+     }while(final == EMPTY_CHAR);
+     
 }
 
 void user_computer() {
