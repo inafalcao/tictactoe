@@ -42,6 +42,7 @@ int my_max(char board[N][N], char player);
 int my_min(char board[N][N], char player);
 void minimax(char board[N][N], char player);
 
+
 void computer_computer();
 int check_winner_2(char board[N][N]);
 void random_move(char board[N][N], char ch);
